@@ -23,7 +23,7 @@ The application aims to provide a simple, intuitive, and responsive experience f
 * React
 * Vite
 * React Router
-* CSS / Tailwind CSS (depending on implementation)
+* CSS / Tailwind CSS
 * Chart.js or Recharts
 
 ### Backend
