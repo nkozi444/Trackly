@@ -1,0 +1,382 @@
+/* ===== Design tokens ===== */
+:root {
+  --ink: #3f2940;
+  --ink-soft: #6c4b70;
+  --bg: #FBEFEF;
+  --surface: #FFE2E2;
+  --border: #F5CBCB;
+  --positive: #8b5e76;
+  --positive-bg: #F5CBCB;
+  --negative: #b34f5c;
+  --negative-bg: #FBEFEF;
+  --accent: #C5B3D3;
+  --accent-bg: #F5CBCB;
+  --radius: 10px;
+  --shadow: 0 1px 2px rgba(63, 41, 64, 0.08), 0 1px 8px rgba(63, 41, 64, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Sora", "Inter", sans-serif;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: 22px; font-weight: 600; }
+h2 { font-size: 18px; font-weight: 600; }
+h3 { font-size: 15px; font-weight: 600; }
+
+p { color: var(--ink-soft); line-height: 1.5; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.mono {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Layout shell ===== */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 232px;
+  flex-shrink: 0;
+  background: var(--accent);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+}
+
+.sidebar-brand {
+  font-family: "Sora", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ink);
+  padding: 0 8px 24px 8px;
+  letter-spacing: -0.02em;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink);
+  border-left-color: var(--ink);
+}
+
+.sidebar-footer {
+  border-top: 1px solid rgba(63, 41, 64, 0.12);
+  padding-top: 16px;
+  margin-top: 16px;
+}
+
+.sidebar-user {
+  font-size: 12px;
+  color: var(--ink-soft);
+  padding: 0 12px 10px 12px;
+  overflow-wrap: break-word;
+}
+
+.main {
+  flex: 1;
+  padding: 32px 40px;
+  max-width: 920px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+/* ===== Cards & surfaces ===== */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 22px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-value.positive { color: var(--positive); }
+.stat-value.negative { color: var(--negative); }
+
+/* ===== Forms ===== */
+.field-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+input,
+select {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  border-color: var(--accent);
+}
+
+label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.btn {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.btn:hover { opacity: 0.9; }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+.btn-danger {
+  background: var(--negative-bg);
+  color: var(--negative);
+  border-color: transparent;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 13px;
+}
+
+/* ===== Table ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead th {
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  font-weight: 600;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr:last-child td { border-bottom: none; }
+
+.amount-positive { color: var(--positive); font-weight: 600; }
+.amount-negative { color: var(--negative); font-weight: 600; }
+
+/* ===== Badges ===== */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.badge-income { background: var(--positive-bg); color: var(--positive); }
+.badge-expense { background: var(--negative-bg); color: var(--negative); }
+
+/* ===== Empty / error states ===== */
+.empty-state {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.error-text {
+  color: var(--negative);
+  font-size: 13px;
+  margin: 4px 0 0 0;
+}
+
+/* ===== Progress bar ===== */
+.progress-track {
+  background: var(--border);
+  border-radius: 6px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+/* ===== Auth pages ===== */
+.auth-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+}
+
+.auth-card {
+  width: 360px;
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.auth-brand {
+  font-family: "Sora", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.auth-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0 0 24px 0;
+}
+
+.auth-field {
+  margin-bottom: 14px;
+}
+
+.auth-field input {
+  width: 100%;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 720px) {
+  .app-shell { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 16px;
+  }
+  .sidebar-brand { padding: 0 12px 0 0; }
+  .sidebar-nav { flex-direction: row; }
+  .sidebar-footer { display: none; }
+  .main { padding: 20px; }
+  .stat-row { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
