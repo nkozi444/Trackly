@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Pencil, Check, X, Trash2 } from "lucide-react";
 import api from "../api/client";
 import Layout from "../components/Layout";
 
@@ -30,6 +31,9 @@ export default function SavingsGoals() {
   const [error, setError] = useState("");
   const [form, setForm] = useState({ name: "", target_amount: "", target_date: "" });
   const [contribution, setContribution] = useState({});
+  const [editingId, setEditingId] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [savingEdit, setSavingEdit] = useState(false);
 
   useEffect(() => {
     loadGoals();
@@ -80,6 +84,30 @@ export default function SavingsGoals() {
       loadGoals();
     } catch (err) {
       setError(err.response?.data?.error || "Failed to delete goal");
+    }
+  }
+
+  function startEdit(goal) {
+    setEditingId(goal.id);
+    setEditName(goal.name);
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setEditName("");
+  }
+
+  async function saveEdit(goal) {
+    if (!editName.trim()) return;
+    setSavingEdit(true);
+    try {
+      await api.put(`/savings-goals/${goal.id}`, { name: editName.trim() });
+      setEditingId(null);
+      loadGoals();
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to update goal");
+    } finally {
+      setSavingEdit(false);
     }
   }
 
@@ -146,11 +174,44 @@ export default function SavingsGoals() {
 
             return (
               <div key={goal.id} className="card">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                  <h3>{goal.name}</h3>
-                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(goal.id)}>
-                    Delete
-                  </button>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+                  {editingId === goal.id ? (
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      autoFocus
+                      style={{ flex: 1, fontFamily: "'Sora', sans-serif", fontWeight: 600 }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") saveEdit(goal);
+                        if (e.key === "Escape") cancelEdit();
+                      }}
+                    />
+                  ) : (
+                    <h3>{goal.name}</h3>
+                  )}
+
+                  <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
+                    {editingId === goal.id ? (
+                      <>
+                        <button className="btn btn-secondary btn-sm" onClick={() => saveEdit(goal)} disabled={savingEdit} title="Save">
+                          <Check size={14} />
+                        </button>
+                        <button className="btn btn-secondary btn-sm" onClick={cancelEdit} title="Cancel">
+                          <X size={14} />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button className="btn btn-secondary btn-sm" onClick={() => startEdit(goal)} title="Edit name">
+                          <Pencil size={14} />
+                        </button>
+                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(goal.id)} title="Delete">
+                          <Trash2 size={14} />
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
 
                 <div className="mono" style={{ margin: "10px 0 8px 0", fontSize: 14, color: "var(--ink-soft)" }}>

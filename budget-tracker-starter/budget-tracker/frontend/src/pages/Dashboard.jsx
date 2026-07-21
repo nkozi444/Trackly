@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { TrendingUp, TrendingDown, Scale } from "lucide-react";
 import api from "../api/client";
 import Layout from "../components/Layout";
 
@@ -72,15 +73,30 @@ export default function Dashboard() {
 
       <div className="stat-row">
         <div className="stat-card">
-          <div className="stat-label">Income</div>
+          <div className="stat-top">
+            <span className="stat-label">Income</span>
+            <span className="stat-icon" style={{ background: "var(--positive-bg)" }}>
+              <TrendingUp size={15} color="var(--positive)" />
+            </span>
+          </div>
           <div className="stat-value positive mono">₱{totalIncome.toFixed(2)}</div>
         </div>
         <div className="stat-card">
-          <div className="stat-label">Expenses</div>
+          <div className="stat-top">
+            <span className="stat-label">Expenses</span>
+            <span className="stat-icon" style={{ background: "var(--negative-bg)" }}>
+              <TrendingDown size={15} color="var(--negative)" />
+            </span>
+          </div>
           <div className="stat-value negative mono">₱{totalExpense.toFixed(2)}</div>
         </div>
         <div className="stat-card">
-          <div className="stat-label">Balance</div>
+          <div className="stat-top">
+            <span className="stat-label">Balance</span>
+            <span className="stat-icon" style={{ background: "var(--accent-bg)" }}>
+              <Scale size={15} color="var(--accent)" />
+            </span>
+          </div>
           <div className={"stat-value mono " + (balance >= 0 ? "positive" : "negative")}>
             ₱{balance.toFixed(2)}
           </div>

@@ -39,6 +39,31 @@ router.post("/", async (req, res) => {
   }
 });
 
+// PUT /api/categories/:id
+router.put("/:id", async (req, res) => {
+  const { name, type } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE categories
+       SET name = COALESCE($1, name),
+           type = COALESCE($2, type)
+       WHERE id = $3 AND user_id = $4
+       RETURNING *`,
+      [name, type, req.params.id, req.userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update category" });
+  }
+});
+
 // DELETE /api/categories/:id
 router.delete("/:id", async (req, res) => {
   try {

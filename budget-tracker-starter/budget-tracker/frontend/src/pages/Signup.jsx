@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Wallet } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Signup() {
@@ -27,7 +28,10 @@ export default function Signup() {
   return (
     <div className="auth-wrap">
       <div className="auth-card">
-        <div className="auth-brand">Trackly</div>
+        <div className="auth-brand" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Wallet size={22} />
+          Trackly
+        </div>
         <p className="auth-sub">Create an account to start tracking.</p>
         <form onSubmit={handleSubmit}>
           <div className="auth-field">

@@ -1,6 +1,83 @@
 import { useEffect, useState } from "react";
+import { Pencil, Check, X, Trash2 } from "lucide-react";
 import api from "../api/client";
 import Layout from "../components/Layout";
+
+function CategoryRow({ category, onSaved, onDelete }) {
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(category.name);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSave() {
+    if (!name.trim()) return;
+    setSaving(true);
+    setError("");
+    try {
+      await api.put(`/categories/${category.id}`, { name: name.trim() });
+      setEditing(false);
+      onSaved();
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to update");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function handleCancel() {
+    setName(category.name);
+    setError("");
+    setEditing(false);
+  }
+
+  return (
+    <div style={{ padding: "8px 0" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+        <span style={{ display: "flex", alignItems: "center", flex: 1, minWidth: 0 }}>
+          <span className={"badge " + (category.type === "income" ? "badge-income" : "badge-expense")} style={{ marginRight: 8, flexShrink: 0 }}>
+            {category.type}
+          </span>
+          {editing ? (
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoFocus
+              style={{ flex: 1 }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSave();
+                if (e.key === "Escape") handleCancel();
+              }}
+            />
+          ) : (
+            <span>{category.name}</span>
+          )}
+        </span>
+
+        {editing ? (
+          <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
+            <button className="btn btn-secondary btn-sm" onClick={handleSave} disabled={saving} title="Save">
+              <Check size={14} />
+            </button>
+            <button className="btn btn-secondary btn-sm" onClick={handleCancel} title="Cancel">
+              <X size={14} />
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
+            <button className="btn btn-secondary btn-sm" onClick={() => setEditing(true)} title="Edit name">
+              <Pencil size={14} />
+            </button>
+            <button className="btn btn-danger btn-sm" onClick={() => onDelete(category.id)} title="Delete">
+              <Trash2 size={14} />
+            </button>
+          </div>
+        )}
+      </div>
+      {error && <p className="error-text">{error}</p>}
+    </div>
+  );
+}
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
@@ -97,20 +174,7 @@ export default function Categories() {
               <p style={{ fontSize: 13 }}>None yet.</p>
             ) : (
               income.map((c) => (
-                <div
-                  key={c.id}
-                  style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0" }}
-                >
-                  <span>
-                    <span className="badge badge-income" style={{ marginRight: 8 }}>
-                      Income
-                    </span>
-                    {c.name}
-                  </span>
-                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(c.id)}>
-                    Delete
-                  </button>
-                </div>
+                <CategoryRow key={c.id} category={c} onSaved={load} onDelete={handleDelete} />
               ))
             )}
           </div>
@@ -121,20 +185,7 @@ export default function Categories() {
               <p style={{ fontSize: 13 }}>None yet.</p>
             ) : (
               expense.map((c) => (
-                <div
-                  key={c.id}
-                  style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0" }}
-                >
-                  <span>
-                    <span className="badge badge-expense" style={{ marginRight: 8 }}>
-                      Expense
-                    </span>
-                    {c.name}
-                  </span>
-                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(c.id)}>
-                    Delete
-                  </button>
-                </div>
+                <CategoryRow key={c.id} category={c} onSaved={load} onDelete={handleDelete} />
               ))
             )}
           </div>
