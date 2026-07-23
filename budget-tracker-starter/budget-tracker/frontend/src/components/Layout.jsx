@@ -28,8 +28,7 @@ export default function Layout({ children }) {
                 to={link.to}
                 className={({ isActive }) => "sidebar-link" + (isActive ? " active" : "")}
               >
-                <Icon size={16} />
-                {link.label}
+                <Icon size={16} /> {link.label}
               </NavLink>
             );
           })}
